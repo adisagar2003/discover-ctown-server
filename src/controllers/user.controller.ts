@@ -26,11 +26,12 @@ router.get('/user', async (req: Request, res: Response) => {
 router.post('/user', async (req: Request, res:Response) => {
 
     try {
-
+        const hashedPass = await bcrypt.hash(req.body.password, 10);
         const userData = {
             username: req.body.username,
             profilePicture: req.body.profilePicture,
             email: req.body.email,
+            password: hashedPass,
             progress: 0,
             createdAt: new Date(),
         }

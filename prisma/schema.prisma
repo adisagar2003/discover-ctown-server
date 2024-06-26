@@ -21,6 +21,7 @@ model User {
   email String
   progress Int
   createdAt DateTime
+  password String?
   notifications Notification[]
 }
 
