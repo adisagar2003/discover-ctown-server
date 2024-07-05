@@ -23,6 +23,7 @@ router.get('/user', async (req: Request, res: Response) => {
     }
 });
 
+// Register user
 router.post('/user', async (req: Request, res:Response) => {
 
     try {

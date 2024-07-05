@@ -13,48 +13,42 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const client_1 = require("@prisma/client");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const client_1 = require("@prisma/client");
+const token_utils_1 = __importDefault(require("../utils/token.utils"));
 const router = (0, express_1.Router)();
 const prisma = new client_1.PrismaClient();
 /*
-Get users, delete user by id, get user by id
+Login
 */
-router.get('/user', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // Get all users from prisma 
-    const users = yield prisma.user.findMany();
+router.post('/auth/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // login 
     try {
-        res.status(200).json({
-            users: users
-        });
+        const { username, password } = req.body;
+        const targetUser = yield prisma.user.findFirstOrThrow({ where: { username: username } });
+        if (targetUser.password) {
+            const isPasswordCorrect = yield bcryptjs_1.default.compare(password, targetUser.password);
+            if (!isPasswordCorrect) {
+                throw new Error('incorrect password');
+            }
+            else {
+                // make auth cookie
+                return res.status(200).json({
+                    email: targetUser.email,
+                    username: targetUser.username,
+                    token: (0, token_utils_1.default)(targetUser.id)
+                });
+            }
+        }
+        else {
+            throw new Error('Error in user model');
+        }
     }
+    // check if username exists
     catch (err) {
         res.status(400).json({
-            error: err
+            error: "username or password incorrect"
         });
-    }
-}));
-// Register user
-router.post('/user', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const hashedPass = yield bcryptjs_1.default.hash(req.body.password, 10);
-        const userData = {
-            username: req.body.username,
-            profilePicture: req.body.profilePicture,
-            email: req.body.email,
-            password: hashedPass,
-            progress: 0,
-            createdAt: new Date(),
-        };
-        const user = yield prisma.user.create({
-            data: userData
-        });
-        res.status(200).json(({
-            user: user
-        }));
-    }
-    catch (err) {
-        throw err;
     }
 }));
 exports.default = router;
