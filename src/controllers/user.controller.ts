@@ -40,7 +40,6 @@ router.post('/user', async (req: Request, res:Response) => {
         const user = await prisma.user.create({
             data: userData
         });
-
         res.status(200).json(({
             user: user
         }));

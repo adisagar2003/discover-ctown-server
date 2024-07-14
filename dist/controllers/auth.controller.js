@@ -33,10 +33,12 @@ router.post('/auth/login', (req, res) => __awaiter(void 0, void 0, void 0, funct
             }
             else {
                 // make auth cookie
+                const tokenGenerated = (0, token_utils_1.default)(targetUser.id);
+                res.cookie('token', tokenGenerated);
                 return res.status(200).json({
                     email: targetUser.email,
                     username: targetUser.username,
-                    token: (0, token_utils_1.default)(targetUser.id)
+                    token: tokenGenerated
                 });
             }
         }
