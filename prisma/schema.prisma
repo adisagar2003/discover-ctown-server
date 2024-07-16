@@ -23,6 +23,7 @@ model User {
   createdAt DateTime
   password String?
   notifications Notification[]
+  Location Int[]
 }
 
 model Notification {
@@ -33,3 +34,14 @@ model Notification {
   user User @relation(fields: [userId], references: [id])
   userId Int
 }
+
+model Location {
+  id Int @id @default(autoincrement())
+  title String
+  description String
+  likes Int
+  latitude Float
+  longitude Float
+  image String
+}
+
