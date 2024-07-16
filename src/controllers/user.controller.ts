@@ -28,6 +28,7 @@ router.post('/user', async (req: Request, res:Response) => {
 
     try {
         const hashedPass = await bcrypt.hash(req.body.password, 10);
+        
         const userData = {
             username: req.body.username,
             profilePicture: req.body.profilePicture,
@@ -40,6 +41,7 @@ router.post('/user', async (req: Request, res:Response) => {
         const user = await prisma.user.create({
             data: userData
         });
+
         res.status(200).json(({
             user: user
         }));
