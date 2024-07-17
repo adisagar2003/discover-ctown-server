@@ -39,9 +39,10 @@ model Location {
   id Int @id @default(autoincrement())
   title String
   description String
-  likes Int
+  likes Int @default(0)
   latitude Float
   longitude Float
   image String
+  category String @default("dining")
 }
 
