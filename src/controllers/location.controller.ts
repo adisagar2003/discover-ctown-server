@@ -64,10 +64,8 @@ router.post('/location', async (req: Request, res: Response) => {
             error: err.message
         })
     }
-        
-
-
 
 });
+
 
 export default router;
