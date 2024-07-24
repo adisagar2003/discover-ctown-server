@@ -46,3 +46,10 @@ model Location {
   category String @default("dining")
 }
 
+
+model LocationMap {
+    id Int @id @default(autoincrement())
+    type String
+    properties Json
+    geometry  Json
+}
