@@ -3,7 +3,7 @@
 import { NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
-exports.cookieJwtAuth = (req: Request, res: Response, next: NextFunction) => {
+export const cookieJwtAuth = (req, res, next) => {
     const token = req.cookies.token;
     try {
         // verify token
