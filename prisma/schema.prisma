@@ -23,7 +23,7 @@ model User {
   createdAt DateTime
   password String?
   notifications Notification[]
-  Location Int[]
+  locations Int[] @default([])
 }
 
 model Notification {
