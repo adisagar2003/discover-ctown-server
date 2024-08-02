@@ -27,7 +27,8 @@ router.post('/auth/login', async (req: Request, res: Response) => {
                 return res.status(200).json({
                     email: targetUser.email, 
                     username: targetUser.username,
-                    token: tokenGenerated
+                    token: tokenGenerated,
+                    locations: targetUser.locations
                 });
             }
         

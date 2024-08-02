@@ -53,3 +53,4 @@ model LocationMap {
     properties Json
     geometry  Json
 }
+
