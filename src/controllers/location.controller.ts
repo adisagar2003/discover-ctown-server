@@ -37,19 +37,33 @@ router.post(
     })
 })
 
-router.post('/location', async (req: Request, res: Response) => {
+router.post('/locationMap', async (req: Request, res: Response) => {
     // get location data to put in 
     // is the token authenticated as admin???? ⌚
+
+    /*
+{
+      "type": "Feature",
+      "properties": {
+        "name": "Confideration center of Arts",
+        "category": "Arts&Culture"
+      },
+      "geometry": {
+        "coordinates": [
+          -63.127150985748486,
+          46.23431826761407
+        ],
+        "type": "Point"
+      }
+    }
+
+    */
     try {
-        const location = await prisma.location.create({
+        const location = await prisma.locationMap.create({
             data: 
-            {title: req.body.title,
-            description: req.body.description,
-            image: req.body.image,
-            longitude: Number(req.body.longitude),
-            latitude: Number(req.body.latitude),
-            likes: 0,
-            category: req.body.category
+            {type: req.body.type,
+            properties: req.body.properties,
+            geometry: req.body.geometry,
         }
         });
 
