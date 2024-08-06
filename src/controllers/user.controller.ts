@@ -56,7 +56,6 @@ router.post('/user', async (req: Request, res:Response) => {
 });
 
 // visit a location
-
 router.post('/visitLocation', cookieJwtAuth,async (req, res) => {
     
     try {
@@ -76,7 +75,39 @@ router.post('/visitLocation', cookieJwtAuth,async (req, res) => {
         })
     }
     catch(err) {
-
+        res.status(400).json({
+            message: 'error'
+        })
     }
+});
+
+router.get('/progress', cookieJwtAuth, async (req, res) => {
+    try {
+        // count the total number of locations
+        const totalLocationCount = await prisma.locationMap.aggregate({
+            _count: true
+        });
+        
+        // get the target user
+        const targetUser = await prisma.user.findFirst({where: {id: req.user.id}});
+        
+        // get the locations length, and make it into percentage 
+        const locationsLength = targetUser.locations.length;
+        console.log(locationsLength);
+        console.log(totalLocationCount);
+        const percentageCalculated = locationsLength/totalLocationCount._count * 100;
+
+        res.status(200).json({
+            response: Number(parseFloat(percentageCalculated).toFixed(2))
+        })
+    }
+    catch(err) {
+        res.status(400).json({
+            response: 'Unknown error occured'
+        })
+    }  
+    
+    
 })
+
 export default router;
