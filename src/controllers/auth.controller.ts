@@ -22,13 +22,14 @@ router.post('/auth/login', async (req: Request, res: Response) => {
             }
             else {
                 // make auth cookie
-                const tokenGenerated = generateToken(targetUser.id);
+                 const tokenGenerated = generateToken(targetUser.id);
                 res.cookie('token', tokenGenerated);
                 return res.status(200).json({
                     email: targetUser.email, 
                     username: targetUser.username,
                     token: tokenGenerated,
-                    locations: targetUser.locations
+                    locations: targetUser.locations,
+                    id: targetUser.id
                 });
             }
         
