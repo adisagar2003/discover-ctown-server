@@ -55,6 +55,26 @@ router.post('/user', async (req: Request, res:Response) => {
     }
 });
 
+// find a user by id 
+router.get('/user/:id', async (req: Request, res: Response) => {
+    try {
+        // find user with the given id 
+        const targetUser = await prisma.user.findFirst({where: {id: Number(req.params.id)}});
+        if (!targetUser) return res.status(400).json({
+            error: 'No user with this id found'
+        });
+        res.status(200).json({
+            response: targetUser
+        });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).json({
+            error: "Unknown error"
+        })
+    }
+})
+
 // visit a location
 router.post('/visitLocation', cookieJwtAuth,async (req, res) => {
     
