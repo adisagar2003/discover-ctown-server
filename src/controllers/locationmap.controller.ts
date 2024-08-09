@@ -12,11 +12,10 @@ router.get('/locationMap/:count', async (req, res) => {
     res.status(200).json({
         data: locationMaps
     })
-})
+});
 
 // get location in terms of search param
-router.get('/locationMap/search/:name', async (req, res) => {
-    
+router.get('/locationMapSearch/:name', async (req, res) => { 
     const locationMaps = await prisma.locationMap.findMany({where:{properties:{
         path: ['name'], string_contains:req.params.name
     }},
