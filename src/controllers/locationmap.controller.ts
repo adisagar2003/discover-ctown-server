@@ -24,7 +24,6 @@ router.get('/locationMapSearch/:name', async (req, res) => {
 });
 
     if (!locationMaps) return res.status(200).json({error: 'No locations found'});
-
     res.status(200).json({
         response: locationMaps
     })
