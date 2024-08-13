@@ -4,6 +4,7 @@ import { NextFunction, Request, Response, Router } from 'express';
 import { PrismaClient } from '@prisma/client'
 import bcrypt from "bcryptjs";
 import { cookieJwtAuth } from '../middlewares/checkAuth';
+import { log } from 'console';
 
 const router: Router = Router();
 const prisma = new PrismaClient();
@@ -84,20 +85,28 @@ router.post('/visitLocation', cookieJwtAuth,async (req, res) => {
         const targetUser = await prisma.user.findFirst({where: {id: req.user.id}});
         const targetLocation = await prisma.locationMap.findFirst({where: {id: req.body.id}});
         if (!targetLocation) res.status(400).json({error: 'target location not found'});
+    
         let locationArray = targetUser?.locations;
-        // update the locations array
-        locationArray = [...locationArray, targetLocation.id]
-        await prisma.user.update({where:{id: targetUser.id}, data:{
-            locations: locationArray
-        }});
-        res.status(200).json({
-            message: 'data successfully updated'
-        })
+        console.log({locationArray}, req.body.id)
+        // update the locations array 
+        if (locationArray?.includes(req.body.id)) {
+            res.status(300).json({message: 'already visited location'})
+        }
+        else {
+            locationArray = [...locationArray, targetLocation.id]
+
+            await prisma.user.update({where:{id: targetUser.id}, data:{
+                locations: locationArray
+            }});
+
+            res.status(200).json({
+                message: 'Updated location'
+            })
+        }
+        
     }
     catch(err) {
-        res.status(400).json({
-            message: 'error'
-        })
+        console.log(err);
     }
 });
 
