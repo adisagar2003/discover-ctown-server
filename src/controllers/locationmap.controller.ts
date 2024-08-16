@@ -14,6 +14,17 @@ router.get('/locationMap/:count', async (req, res) => {
     })
 });
 
+router.get('/locations/totalCount', async (req, res) => {
+    const locationMaps = await prisma.locationMap.aggregate({
+        _count: {
+            id: true
+        }
+    });
+    res.status(200).json({
+        data: locationMaps
+    })
+})
+
 // get location in terms of search param
 router.get('/locationMapSearch/:name', async (req, res) => { 
     const locationMaps = await prisma.locationMap.findMany({where:{properties:{

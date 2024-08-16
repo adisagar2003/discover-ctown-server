@@ -69,7 +69,6 @@ router.get('/user/:id', async (req: Request, res: Response) => {
         });
     }
     catch (err) {
-        console.log(err);
         res.status(400).json({
             error: "Unknown error"
         })
@@ -77,28 +76,27 @@ router.get('/user/:id', async (req: Request, res: Response) => {
 })
 
 // visit a location
-router.post('/visitLocation', cookieJwtAuth,async (req, res) => {
+router.post('/visitLocation', cookieJwtAuth, async (req, res) => {
     
     try {
         //  add location id to locations section of the user
         // find the target user
-        const targetUser = await prisma.user.findFirst({where: {id: req.user.id}});
+        let targetUserId = req.user.user.id
+        const targetUser = await prisma.user.findUnique({where: {id: targetUserId}});
         const targetLocation = await prisma.locationMap.findFirst({where: {id: req.body.id}});
         if (!targetLocation) res.status(400).json({error: 'target location not found'});
     
         let locationArray = targetUser?.locations;
-        console.log({locationArray}, req.body.id)
+        
         // update the locations array 
         if (locationArray?.includes(req.body.id)) {
             res.status(300).json({message: 'already visited location'})
         }
         else {
             locationArray = [...locationArray, targetLocation.id]
-
-            await prisma.user.update({where:{id: targetUser.id}, data:{
+            await prisma.user.update({where:{id: (targetUser.id)}, data:{
                 locations: locationArray
             }});
-
             res.status(200).json({
                 message: 'Updated location'
             })
@@ -122,8 +120,6 @@ router.get('/progress', cookieJwtAuth, async (req, res) => {
         
         // get the locations length, and make it into percentage 
         const locationsLength = targetUser.locations.length;
-        console.log(locationsLength);
-        console.log(totalLocationCount);
         const percentageCalculated = locationsLength/totalLocationCount._count * 100;
 
         res.status(200).json({
