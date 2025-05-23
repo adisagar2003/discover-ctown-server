@@ -18,11 +18,7 @@ const client_1 = require("@prisma/client");
 const token_utils_1 = __importDefault(require("../utils/token.utils"));
 const router = (0, express_1.Router)();
 const prisma = new client_1.PrismaClient();
-/*
-Login
-*/
 router.post('/auth/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // login 
     try {
         const { username, password } = req.body;
         const targetUser = yield prisma.user.findFirstOrThrow({ where: { username: username } });
@@ -38,7 +34,9 @@ router.post('/auth/login', (req, res) => __awaiter(void 0, void 0, void 0, funct
                 return res.status(200).json({
                     email: targetUser.email,
                     username: targetUser.username,
-                    token: tokenGenerated
+                    token: tokenGenerated,
+                    locations: targetUser.locations,
+                    id: targetUser.id
                 });
             }
         }

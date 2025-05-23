@@ -12,19 +12,19 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
-/*
-App Configuration
-*/
+// middleware 
 app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)({
     origin: 'http://localhost:5173',
     credentials: true
 }));
 app.use(body_parser_1.default.json());
-app.use(body_parser_1.default.urlencoded({ extended: true }));
+app.use(body_parser_1.default
+    .urlencoded({ extended: true }));
 app.use(routes_1.default);
-app.get('/', (req, res) => {
-    res.send('Express + TS Server');
+app.get('/', (_, res) => {
+    console.log(">> 2 Test build date: ", new Date());
+    res.send('Discover ctwon server');
 });
 app.get('/error', (req, res) => {
     res.status(400).json({
