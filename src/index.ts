@@ -23,7 +23,7 @@ app.use(routes);
 
 
 app.get('/', (_: Request, res: Response) => {
-    console.log(">> Test build date: ", new Date());
+    console.log(">> 2 Test build date: ", new Date());
     res.send('Discover ctwon server');
 });
 
