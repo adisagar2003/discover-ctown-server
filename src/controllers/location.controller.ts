@@ -2,6 +2,7 @@
 
 import { PrismaClient } from "@prisma/client";
 import { Router } from "express";
+import dummyData from "../data/places.json";
 
 const router:Router = Router();
 const prisma = new PrismaClient();
@@ -39,7 +40,7 @@ router.post(
 
 router.post('/locationMap', async (req: Request, res: Response) => {
     // get location data to put in 
-    // is the token authenticated as admin???? ⌚
+    // is the token authenticated as admin? 
 
     /*
 {
@@ -80,6 +81,28 @@ router.post('/locationMap', async (req: Request, res: Response) => {
     }
 
 });
+
+router.get('/development/populate',async (req: Request, res: Response) => {
+
+    console.log(dummyData.features);
+
+    for (const elem of dummyData.features) {
+        await prisma.locationMap.create({
+            data: {
+                properties: elem.properties,
+                geometry: elem.geometry,
+                type: elem.type
+            }
+        }).then((r)=>console.log("promise solved"),()=>{console.log("not solved")});
+    } 
+
+    res.status(300).json({
+            message: "Check console",
+            resultArray: a
+    });
+}) 
+
+
 
 
 export default router;

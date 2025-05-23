@@ -5,13 +5,8 @@ import generateToken from '../utils/token.utils';
 const router: Router = Router();
 const prisma = new PrismaClient();
 
-/*
-Login
-*/
 
 router.post('/auth/login', async (req: Request, res: Response) => {
-    // login 
-    
     try {
         const {username, password} = req.body;
         const targetUser = await prisma.user.findFirstOrThrow({where:{ username: username }});
@@ -22,7 +17,7 @@ router.post('/auth/login', async (req: Request, res: Response) => {
             }
             else {
                 // make auth cookie
-                 const tokenGenerated = generateToken(targetUser.id);
+                const tokenGenerated = generateToken(targetUser.id);
                 res.cookie('token', tokenGenerated);
                 return res.status(200).json({
                     email: targetUser.email, 
