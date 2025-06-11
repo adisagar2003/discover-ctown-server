@@ -18,6 +18,11 @@ const client_1 = require("@prisma/client");
 const token_utils_1 = __importDefault(require("../utils/token.utils"));
 const router = (0, express_1.Router)();
 const prisma = new client_1.PrismaClient();
+var UserType;
+(function (UserType) {
+    UserType[UserType["USER"] = 0] = "USER";
+    UserType[UserType["ADMIN"] = 1] = "ADMIN";
+})(UserType || (UserType = {}));
 router.post('/auth/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { username, password } = req.body;
@@ -36,7 +41,8 @@ router.post('/auth/login', (req, res) => __awaiter(void 0, void 0, void 0, funct
                     username: targetUser.username,
                     token: tokenGenerated,
                     locations: targetUser.locations,
-                    id: targetUser.id
+                    id: targetUser.id,
+                    role: UserType.USER
                 });
             }
         }

@@ -2,9 +2,10 @@ import { NextFunction, Request, Response, Router } from 'express';
 import bcrypt from "bcryptjs";
 import { PrismaClient } from '@prisma/client';
 import generateToken from '../utils/token.utils';
+import { UserRole } from '../types/enums';
+
 const router: Router = Router();
 const prisma = new PrismaClient();
-
 
 router.post('/auth/login', async (req: Request, res: Response) => {
     try {
@@ -24,7 +25,8 @@ router.post('/auth/login', async (req: Request, res: Response) => {
                     username: targetUser.username,
                     token: tokenGenerated,
                     locations: targetUser.locations,
-                    id: targetUser.id
+                    id: targetUser.id,
+                    role: UserRole.USER
                 });
             }
         

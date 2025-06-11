@@ -15,6 +15,7 @@ model User {
   email          String
   progress       Int
   createdAt      DateTime
+  role           Int            @default(0)
   password       String?
   locations      Int[]          @default([])
   notifications  Notification[]

@@ -2,6 +2,7 @@
 
 import { NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { UserRole } from "../types/enums";
 
 export const cookieJwtAuth = (req, res, next) => {
     const token = req.cookies.token;
@@ -13,5 +14,24 @@ export const cookieJwtAuth = (req, res, next) => {
     }   catch (err) {
         res.clearCookie("token");
         return res.redirect("/error");
+    }
+}
+
+export const checkIfUserIsAdmin = async (req, res, next) => {
+    const token = req.cookies.token;
+    try {
+        const user = jwt.verify(token, `${process.env.JWT_SECRET}`); // returns id
+        const targetUser = await prisma.user.findUnique({where:{ id: user }});
+        if (targetUser.role == UserRole.ADMIN) {
+            next();
+        }
+        else {
+            throw new Error("Admin privilleges are not there");
+        }
+    }
+    catch (err) {
+        res.status(400).json({
+            error: "No admin rights"
+        });
     }
 }

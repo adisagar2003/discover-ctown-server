@@ -8,10 +8,10 @@ import { log } from 'console';
 
 const router: Router = Router();
 const prisma = new PrismaClient();
+
 /*
 Get users, delete user by id, get user by id
 */
-
 router.get('/user', async (req: Request, res: Response) => {
     // Get all users from prisma 
     const users = await prisma.user.findMany();    
