@@ -14,8 +14,8 @@ const port = process.env.PORT || 3000;
 app.use(cookies()); 
 
 app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials: true
+  origin: 'https://charlottetown.netlify.app',
+  credentials: true               
 }));
 
 app.use(bodyParser.json());
