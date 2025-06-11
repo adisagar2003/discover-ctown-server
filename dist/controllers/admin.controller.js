@@ -13,7 +13,9 @@ const express_1 = require("express");
 const checkAuth_1 = require("../middlewares/checkAuth");
 const router = (0, express_1.Router)();
 // checks if the user calling the route is admin
-router.get("/admin/get", checkAuth_1.checkIfUserIsAdmin, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.status(200).json({});
+router.get("/admin", checkAuth_1.checkIfUserIsAdmin, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.status(200).json({
+        response: "Success, admin rights found"
+    });
 }));
 exports.default = router;

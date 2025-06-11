@@ -1,7 +1,7 @@
 export enum UserRole {
-    USER = 'USER',
-    ADMIN = 'ADMIN',
-    GUEST = 'GUEST'
+    ADMIN = 1,
+    USER = 2,
+    GUEST = 3
 }
 
 export enum Status {

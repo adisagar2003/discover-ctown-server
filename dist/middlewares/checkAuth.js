@@ -16,6 +16,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkIfUserIsAdmin = exports.cookieJwtAuth = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const enums_1 = require("../types/enums");
+const client_1 = require("@prisma/client");
+const prisma = new client_1.PrismaClient();
 const cookieJwtAuth = (req, res, next) => {
     const token = req.cookies.token;
     try {
@@ -32,9 +34,11 @@ const cookieJwtAuth = (req, res, next) => {
 exports.cookieJwtAuth = cookieJwtAuth;
 const checkIfUserIsAdmin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const token = req.cookies.token;
+    console.log(token);
     try {
-        const user = jsonwebtoken_1.default.verify(token, `${process.env.JWT_SECRET}`); // returns id
-        const targetUser = yield prisma.user.findUnique({ where: { id: user } });
+        const { user } = jsonwebtoken_1.default.verify(token, `${process.env.JWT_SECRET}`); // returns id
+        const targetUser = yield prisma.user.findUnique({ where: { id: user.id } });
+        console.log(targetUser);
         if (targetUser.role == enums_1.UserRole.ADMIN) {
             next();
         }
@@ -43,6 +47,7 @@ const checkIfUserIsAdmin = (req, res, next) => __awaiter(void 0, void 0, void 0,
         }
     }
     catch (err) {
+        console.log(err);
         res.status(400).json({
             error: "No admin rights"
         });
